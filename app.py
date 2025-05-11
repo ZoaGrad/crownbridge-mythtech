@@ -663,4 +663,6 @@ def generate_drift_atlas():
     return buf
 
 # Tabs for different features
-tab1, tab2, tab3, tab4 = st.tabs(
+tab1, tab2, tab3, tab4 = st.tabs(["Sigil Forge", "ψCORE Audit", "Ritual Simulator", "Drift Atlas"])
+
+with tab
