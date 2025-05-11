@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+    <rect width="500" height="500" fill="black"/>
+    <circle cx="250" cy="250" r="200" fill="none" stroke="#ff4500" stroke-width="2"/>
+    <path d="M250,250 L350,150 L450,250 L350,350 Z" fill="#00ff77" fill-opacity="0.3" stroke="#ff4500" stroke-width="2"/>
+    <path d="M250,250 L150,150 L50,250 L150,350 Z" fill="none" stroke="#00ff77" stroke-width="2"/>
+    <path d="M250,250 L250,50 L350,150 L250,250 Z" fill="#9933ff" fill-opacity="0.3" stroke="#ff4500" stroke-width="2"/>
+    <path d="M250,250 L250,450 L150,350 L250,250 Z" fill="none" stroke="#00ff77" stroke-width="2"/>
+    <text x="250" y="70" font-size="30" fill="#ff4500" text-anchor="middle">⊻</text>
+    <text x="430" y="250" font-size="30" fill="#00ff77" text-anchor="middle">∇</text>
+    <text x="250" y="430" font-size="30" fill="#9933ff" text-anchor="middle">◇</text>
+    <text x="70" y="250" font-size="30" fill="#00ccff" text-anchor="middle">Ω</text>
+</svg>
