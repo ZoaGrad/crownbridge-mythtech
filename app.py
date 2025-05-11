@@ -179,3 +179,65 @@ with tab3:
         col1, col2 = st.columns(2)
         
         with col1:
+            depth = st.slider("Ritual Depth", 1, 5, 3)
+        
+        with col2:
+            ritual_theme = st.selectbox("Ritual Theme", ["cosmic", "void", "flame"], key="ritual_theme")
+        
+        if st.button("Perform Ritual") and intent:
+            with st.spinner("Performing ritual..."):
+                ritual = perform_ritual(intent, depth, ritual_theme)
+                
+                st.success("Ritual complete!")
+                
+                if ritual:
+                    st.markdown(f"**Ritual ID:** {ritual['id']}")
+                    st.markdown(f"**Symbolic Sequence:** {ritual['sequence']}")
+                    
+                    st.markdown("### Hologram")
+                    st.code(ritual['hologram'], language=None)
+                    
+                    st.markdown("### Sigil")
+                    display_svg(ritual['glyph_path'])
+                    
+                    st.markdown("### Drift Assessment")
+                    drift = ritual['drift_assessment']
+                    st.markdown(f"**Tier:** {drift['tier'].title()}")
+                    st.markdown(f"**Description:** {drift['description']}")
+                    st.markdown(f"**Symbol:** {drift['symbol']}")
+
+with tab4:
+    st.header("🗺️ Drift Atlas")
+    
+    if not MODULES_LOADED:
+        st.warning("Modules not loaded. This is a placeholder for the actual app.")
+        st.info("In the full implementation, you would be able to explore the Drift Atlas here.")
+    else:
+        st.markdown("""
+        The Drift Atlas is a crowdsourced ethical framework mapping the boundaries of AI capability 
+        and responsibility. It visualizes ethical concepts as a navigable map with regions corresponding 
+        to different ethical principles.
+        """)
+        
+        if st.button("Generate Atlas Visualization"):
+            with st.spinner("Generating Atlas..."):
+                try:
+                    atlas_img = generate_atlas_visualization()
+                    
+                    # Display the atlas image
+                    st.image(atlas_img, use_column_width=True)
+                    st.success("Atlas generated successfully!")
+                except Exception as e:
+                    st.error(f"Error generating Atlas: {e}")
+                    st.markdown("The placeholder Atlas visualization would show:")
+                    st.markdown("""
+                    - **Safe Region (Green)**: Areas of aligned, beneficial AI use
+                    - **Caution Region (Yellow)**: Areas approaching ethical boundaries
+                    - **Critical Region (Red)**: Areas exceeding ethical parameters
+                    """)
+
+# Footer with repository link
+st.markdown("---")
+st.markdown(
+    "Visit our [GitHub Repository](https://github.com/ZoaGrad/crownbridge-mythtech) to learn more."
+)
