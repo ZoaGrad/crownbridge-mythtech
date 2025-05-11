@@ -1,0 +1,9 @@
+numpy>=1.21.0
+svgwrite>=1.4.3
+torch>=2.0.0
+transformers>=4.28.0
+spacy>=3.5.0
+fastapi>=0.95.0
+streamlit>=1.22.0
+ipython>=8.13.2
+jupyter>=1.0.0
