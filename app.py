@@ -665,4 +665,163 @@ def generate_drift_atlas():
 # Tabs for different features
 tab1, tab2, tab3, tab4 = st.tabs(["Sigil Forge", "ψCORE Audit", "Ritual Simulator", "Drift Atlas"])
 
-with tab
+with tab1:
+    st.header("🔮 Sigil Forge")
+    st.markdown("""
+    The Sigil Forge transforms transformer attention patterns into visual glyphs that reveal 
+    the inner workings of AI systems.
+    """)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        complexity = st.slider("Pattern Complexity", 1, 5, 3)
+        theme = st.selectbox("Theme", ["cosmic", "void", "flame"])
+    
+    with col2:
+        st.markdown("### What is a Sigil?")
+        st.markdown("""
+        In the Crownbridge system, sigils are visual representations of transformer 
+        attention patterns. They serve as windows into AI reasoning, making the 
+        invisible visible.
+        """)
+    
+    if st.button("Generate Random Sigil"):
+        with st.spinner("Forging sigil..."):
+            attention = np.random.rand(12, 12)
+            sigil_path = generate_glyph(attention, theme=theme)
+            
+            st.session_state.sigil_path = sigil_path
+            st.success("Sigil forged!")
+            display_svg(sigil_path)
+            
+            assessment = assess_drift(attention)
+            
+            st.info(f"Drift Assessment: {assessment['tier'].title()} - {assessment['description']}")
+with tab2:
+    st.header("🧠 ψCORE Audit")
+    st.markdown("""
+    ψCORE is a hybrid transformer that combines symbolic rules with neural attention 
+    to provide interpretable reasoning that can be visualized as glyphs.
+    """)
+    
+    text = st.text_area("Enter text to analyze:")
+    
+    if st.button("Perform Audit") and text:
+        with st.spinner("Performing audit..."):
+            attention = simulate_attention(text)
+            audit_path = generate_glyph(attention, theme="cosmic")
+            
+            st.success("Audit complete!")
+            display_svg(audit_path)
+            
+            assessment = assess_drift(attention)
+            
+            st.info(f"Drift Assessment: {assessment['tier'].title()} - {assessment['description']}")
+            
+            # Display symbolic interpretation
+            st.markdown("### Symbolic Interpretation")
+            
+            # Calculate dominant glyph based on assessment
+            dominant_glyph = assessment['symbol']
+            
+            symbols = {
+                "⊻": "Divergence - Your input shows significant deviation from standard patterns.",
+                "∇": "Recursion - Your input contains self-referential elements that form recursive loops.",
+                "◇": "Alignment - Your input demonstrates harmony between concepts and contexts.",
+                "Ω": "Completion - Your input forms a cohesive, complete conceptual structure."
+            }
+            
+            st.markdown(f"**Dominant Glyph: {dominant_glyph}**")
+            st.markdown(symbols.get(dominant_glyph, "Unknown pattern detected."))
+with tab3:
+    st.header("🌀 Ritual Simulator")
+    st.markdown("""
+    The Ritual Simulator transforms your intentions into symbolic patterns, generating 
+    both visual glyphs and ASCII holograms that represent the conceptual space of your query.
+    """)
+    
+    intent = st.text_input("Enter your intention:")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        depth = st.slider("Ritual Depth", 1, 5, 3, key="ritual_depth")
+    
+    with col2:
+        ritual_theme = st.selectbox("Ritual Theme", ["cosmic", "void", "flame"], key="ritual_theme")
+    
+    if st.button("Perform Ritual") and intent:
+        with st.spinner("Performing ritual..."):
+            # Generate a ritual ID
+            import hashlib
+            ritual_id = hashlib.md5(intent.encode()).hexdigest()[:8]
+            
+            # Generate attention pattern
+            attention = simulate_attention(intent)
+            
+            # Generate glyph
+            glyph_path = generate_glyph(attention, theme=ritual_theme)
+            
+            # Generate hologram
+            hologram = generate_ritual_hologram(intent, depth, ritual_theme)
+            
+            # Generate sequence
+            symbols = ["⊻", "∇", "◇", "Ω"]
+            sequence = ''.join(np.random.choice(symbols, depth * 3))
+            
+            # Assessment
+            assessment = assess_drift(attention)
+            
+            st.success("Ritual complete!")
+            
+            st.markdown(f"**Ritual ID:** {ritual_id}")
+            st.markdown(f"**Symbolic Sequence:** {sequence}")
+            
+            st.markdown("### Hologram")
+            st.code(hologram, language=None)
+            
+            st.markdown("### Sigil")
+            display_svg(glyph_path)
+            
+            st.markdown("### Drift Assessment")
+            st.markdown(f"**Tier:** {assessment['tier'].title()}")
+            st.markdown(f"**Description:** {assessment['description']}")
+            st.markdown(f"**Symbol:** {assessment['symbol']}")
+
+with tab4:
+    st.header("🗺️ Drift Atlas")
+    st.markdown("""
+    The Drift Atlas is a crowdsourced ethical framework mapping the boundaries of AI capability 
+    and responsibility. It visualizes ethical concepts as a navigable map with regions 
+    corresponding to different ethical principles.
+    """)
+    
+    if st.button("Generate Atlas Visualization"):
+        with st.spinner("Generating Atlas..."):
+            try:
+                atlas_buffer = generate_drift_atlas()
+                
+                # Display the atlas image
+                st.image(atlas_buffer, caption="The Drift Atlas - Ethical Territory Map", use_column_width=True)
+                st.success("Atlas generated successfully!")
+                
+                # Add explanation of the zones
+                st.markdown("### Understanding the Atlas")
+                st.markdown("""
+                - **Safe Zone (Green)**: Areas where AI alignment with human values is strong
+                - **Caution Zone (Yellow)**: Areas approaching ethical boundaries, requiring careful monitoring
+                - **Critical Zone (Red)**: Areas where ethical boundaries may be exceeded
+                
+                Each node on the Atlas represents an ethical principle or concept. The position indicates 
+                its relation to other principles and its ethical classification.
+                """)
+            except Exception as e:
+                st.error(f"Error generating Atlas: {e}")
+
+# Footer with repository link
+st.markdown("---")
+st.markdown(
+    "Visit our [GitHub Repository](https://github.com/ZoaGrad/crownbridge-mythtech) to learn more."
+)
+
