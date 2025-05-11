@@ -122,5 +122,5 @@ with tab3:
 # Footer with repository link
 st.markdown("---")
 st.markdown(
-    "Visit our [GitHub Repository](https://github.com/YOUR_USERNAME/crownbridge-mythtech) to learn more."
+    "Visit our [GitHub Repository](https://github.com/ZoaGrad/crownbridge-mythtech) to learn more."
 )
