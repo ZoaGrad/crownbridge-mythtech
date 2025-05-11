@@ -1,0 +1,116 @@
+```python
+"""
+Glyph Generator - Converts transformer attention into symbolic glyphs
+"""
+
+import numpy as np
+import svgwrite
+from pathlib import Path
+import os
+
+def generate_glyph(attention_weights, output_path=None, theme="cosmic"):
+    """
+    Convert transformer attention weights to a recursive SVG sigil.
+    
+    Args:
+        attention_weights: numpy array of attention weights
+        output_path: path to save the SVG output
+        theme: visual theme for the glyph ("cosmic", "void", "flame")
+        
+    Returns:
+        Path to the generated SVG file
+    """
+    # Create SVG canvas
+    if output_path is None:
+        os.makedirs("output/glyphs", exist_ok=True)
+        output_path = f"output/glyphs/sigil_{np.random.randint(10000)}.svg"
+        
+    dwg = svgwrite.Drawing(output_path, size=("500", "500"), profile='tiny')
+    
+    # Add background
+    dwg.add(dwg.rect(insert=(0, 0), size=('100%', '100%'), fill='black'))
+    
+    # Define color theme
+    themes = {
+        "cosmic": {
+            "primary": "#ff4500",
+            "secondary": "#00ff77",
+            "accent": "#9933ff"
+        },
+        "void": {
+            "primary": "#0033cc", 
+            "secondary": "#00ccff",
+            "accent": "#ffffff"
+        },
+        "flame": {
+            "primary": "#ff3300",
+            "secondary": "#ffcc00",
+            "accent": "#ff9900"
+        }
+    }
+    colors = themes.get(theme, themes["cosmic"])
+    
+    # Create gradient
+    gradient = dwg.linearGradient((0, 0), (0, 1))
+    gradient.add_stop_color(0, colors["primary"])
+    gradient.add_stop_color(0.5, colors["secondary"])
+    gradient.add_stop_color(1, colors["accent"])
+    dwg.defs.add(gradient)
+    
+    # Normalize attention weights
+    weights = np.clip(attention_weights, 0, 1)
+    
+    # Calculate center of the canvas
+    center_x, center_y = 250, 250
+    
+    # Generate paths based on attention patterns
+    for i in range(min(len(weights), 12)):
+        # Extract a row of weights for this path
+        row = weights[i][:10]
+        
+        # Create a path starting from the center
+        path_data = f"M{center_x},{center_y} "
+        
+        # Add points based on weights
+        radius = 180  # Maximum radius from center
+        angle_step = 2 * np.pi / len(row)
+        
+        for j, weight in enumerate(row):
+            angle = j * angle_step
+            r = 30 + weight * radius
+            x = center_x + r * np.cos(angle)
+            y = center_y + r * np.sin(angle)
+            
+            # Use different path commands based on position
+            if j == 0:
+                path_data += f"L{x},{y} "
+            elif j % 3 == 0:
+                path_data += f"Q{center_x},{center_y} {x},{y} "
+            else:
+                path_data += f"L{x},{y} "
+        
+        # Close the path for some elements to create shapes
+        if i % 2 == 0:
+            path_data += "Z"
+        
+        # Add the path with gradient fill or stroke
+        if i % 2 == 0:  # Alternate between filled and outlined paths
+            dwg.add(dwg.path(d=path_data, fill="url(#gradient)", fill_opacity=0.3, 
+                           stroke=colors["primary"], stroke_width=2))
+        else:
+            dwg.add(dwg.path(d=path_data, fill="none", 
+                           stroke=colors["secondary"], stroke_width=2))
+    
+    # Add symbolic glyphs at key points
+    symbols = ["⊻", "∇", "◇", "Ω"]
+    for i, symbol in enumerate(symbols):
+        angle = i * np.pi / 2  # Evenly space symbols around circle
+        x = center_x + 210 * np.cos(angle)
+        y = center_y + 210 * np.sin(angle)
+        
+        dwg.add(dwg.text(symbol, insert=(x, y), fill=colors["accent"], 
+                       font_size=24, text_anchor="middle"))
+    
+    # Save SVG
+    dwg.save()
+    return output_path
